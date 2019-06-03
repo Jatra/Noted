@@ -1,0 +1,2 @@
+# Noted
+Architecture Template
