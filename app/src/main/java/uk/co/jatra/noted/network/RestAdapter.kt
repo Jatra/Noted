@@ -7,8 +7,6 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val BASE_URL = "your server url"
-
 //INITIAL SETUP: using global variable
 //TODO change to injection: allows substitution for testing.
 val api by lazy {
