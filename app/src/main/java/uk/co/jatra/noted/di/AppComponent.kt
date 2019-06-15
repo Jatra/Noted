@@ -1,24 +1,14 @@
 package uk.co.jatra.noted.di
 
-import android.app.Application
-import android.content.Context
 import dagger.Component
-import dagger.Module
-import dagger.Provides
-import uk.co.jatra.noted.NotedActivity
-import javax.inject.Singleton
+import uk.co.jatra.noted.repository.OccurenceRepository
+import uk.co.jatra.noted.ui.occurred.OccurredFragment
+import uk.co.jatra.noted.ui.occurred.OccurrenceViewModelFactory
 
-//Initial Not being used yet.
-//Here to lay the foundations
-//TODO USE for injecting api, repositories
-@Component(modules = arrayOf(AppModule::class))
+//Specify which classes need injection, using which module.
+@Component(modules = [AppModule::class])
 interface AppComponent {
-    fun inject(target: NotedActivity)
-}
-
-@Module
-class AppModule(private val app: Application) {
-    @Provides
-    @Singleton
-    fun providesContext(): Context = app
+    fun inject(target: OccurredFragment)
+    fun inject(target: OccurenceRepository)
+    fun inject(target: OccurrenceViewModelFactory)
 }

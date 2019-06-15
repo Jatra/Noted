@@ -2,7 +2,6 @@ package uk.co.jatra.noted
 
 import android.app.Application
 import uk.co.jatra.noted.di.AppComponent
-import uk.co.jatra.noted.di.AppModule
 import uk.co.jatra.noted.di.DaggerAppComponent
 
 //INITIAL Not using injection. Just here for groundwork
@@ -14,8 +13,9 @@ class NotedApplication: Application() {
         appComponent = initDagger(this)
     }
     private fun initDagger(app: NotedApplication): AppComponent =
+        //Component named DaggerX is defined by interface X, so see AppComponent
         DaggerAppComponent.builder()
-            .appModule(AppModule(app))
+            //AppModule not yet needed.
+//            .appModule(AppModule(app))
             .build()
-
 }
