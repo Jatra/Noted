@@ -1,14 +1,17 @@
 package uk.co.jatra.noted.repository
 
+import io.reactivex.Scheduler
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import uk.co.jatra.noted.network.Api
 import uk.co.jatra.noted.network.Occurrence
-import uk.co.jatra.noted.network.api
+import javax.inject.Inject
+import javax.inject.Named
+
 //INITIAL Just fetch one set of data from api.
-object OccurenceRepository {
+class OccurrenceRepository @Inject constructor(private val api: Api, @Named("IOScheduler") val ioScheduler: Scheduler) {
     //TO_DO add caching
     fun getData(query: String): Single<List<Occurrence>> {
         return api.getOccurences(query)
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(ioScheduler)
     }
 }

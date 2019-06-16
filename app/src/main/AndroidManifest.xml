@@ -6,6 +6,7 @@
 
     <!-- clear text since dummy test server doesnt have a correct certificate! -->
     <application
+            android:name=".NotedApplication"
             android:usesCleartextTraffic="true"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"

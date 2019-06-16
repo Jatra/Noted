@@ -1,24 +1,12 @@
 package uk.co.jatra.noted.di
 
-import android.app.Application
-import android.content.Context
 import dagger.Component
-import dagger.Module
-import dagger.Provides
-import uk.co.jatra.noted.NotedActivity
+import uk.co.jatra.noted.ui.occurred.OccurredFragment
 import javax.inject.Singleton
 
-//Initial Not being used yet.
-//Here to lay the foundations
-//TODO USE for injecting api, repositories
-@Component(modules = arrayOf(AppModule::class))
+//Specify which classes need injection, using which module.
+@Component(modules = [AppModule::class, ApiModule::class, SchedulerModule::class])
+@Singleton
 interface AppComponent {
-    fun inject(target: NotedActivity)
-}
-
-@Module
-class AppModule(private val app: Application) {
-    @Provides
-    @Singleton
-    fun providesContext(): Context = app
+    fun inject(target: OccurredFragment)
 }
