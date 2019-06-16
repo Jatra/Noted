@@ -1,10 +1,11 @@
 package uk.co.jatra.noted
 
 import android.app.Application
+import uk.co.jatra.noted.di.ApiModule
 import uk.co.jatra.noted.di.AppComponent
 import uk.co.jatra.noted.di.DaggerAppComponent
+import uk.co.jatra.noted.di.SchedulerModule
 
-//INITIAL Not using injection. Just here for groundwork
 class NotedApplication: Application() {
     lateinit var appComponent: AppComponent
 
@@ -12,10 +13,13 @@ class NotedApplication: Application() {
         super.onCreate()
         appComponent = initDagger(this)
     }
+
+    //as yet app is not used.
+    //Virtually all apps actually need a context injected.
     private fun initDagger(app: NotedApplication): AppComponent =
         //Component named DaggerX is defined by interface X, so see AppComponent
         DaggerAppComponent.builder()
-            //AppModule not yet needed.
-//            .appModule(AppModule(app))
+            .apiModule(ApiModule())
+            .schedulerModule(SchedulerModule())
             .build()
 }
