@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import kotlinx.android.synthetic.main.occurred_fragment.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.occurred_fragment.view.*
 import uk.co.jatra.noted.NotedApplication
 import uk.co.jatra.noted.R
-import uk.co.jatra.noted.network.Occurrence
 import javax.inject.Inject
 
 //INITIAL BASIC fragment created by Android Studio from ViewModel template
@@ -23,6 +23,7 @@ class OccurredFragment : Fragment() {
     private lateinit var viewModel: OccurredViewModel
     @Inject
     lateinit var viewModelFactory: OccurrenceViewModelFactory
+    private val adapter = OccurredAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +36,10 @@ class OccurredFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.occurred_fragment, container, false)
+        val view = inflater.inflate(R.layout.occurred_fragment, container, false)
+        view.occurrencesView.adapter = adapter
+        view.occurrencesView.layoutManager = LinearLayoutManager(context)
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -46,13 +50,8 @@ class OccurredFragment : Fragment() {
 
     //INITIAL very basic. Assumes always some data, and slaps into a single text field.
     private fun updateView(occurredViewState: OccurredViewState?) {
-        occurredViewState?.let { viewState ->
-            message.text = viewState.occurrences.joinToString(separator = "\n", transform = ::occurrenceText)
+        occurredViewState?.let {
+            adapter.setData(it.occurrences)
         }
     }
-
-    private fun occurrenceText(occurrence: Occurrence) =
-            with (occurrence) {
-                "$time $user $what\n$detail"
-            }
 }
