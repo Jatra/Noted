@@ -1,6 +1,6 @@
 # Private!
 private/
-app/src/main/assets/serverUrl
+serverUrl
 
 # Built application files
 *.apk
