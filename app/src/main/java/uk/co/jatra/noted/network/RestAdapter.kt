@@ -7,10 +7,11 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Singleton
-class RestAdapter @Inject constructor() {
+class RestAdapter @Inject constructor(@Named("BaseUrl") val baseUrl: String) {
     val api by lazy {
         createApi()
     }
@@ -21,7 +22,7 @@ class RestAdapter @Inject constructor() {
 
         val retrofit = Retrofit.Builder()
             .client(createClient())
-            .baseUrl(BASE_URL)
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
