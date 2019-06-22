@@ -1,6 +1,6 @@
 # Private!
 private/
-urls.kt
+serverUrl
 
 # Built application files
 *.apk
