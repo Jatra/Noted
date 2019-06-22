@@ -7,12 +7,18 @@
         android:layout_height="match_parent"
         tools:context=".ui.occurred.OccurredFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/occurrencesView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/ptr"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/occurrence"
-            tools:itemCount="5">
-    </androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/occurrencesView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/occurrence"
+                tools:itemCount="5">
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

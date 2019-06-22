@@ -39,6 +39,9 @@ class OccurredFragment : Fragment() {
         val view = inflater.inflate(R.layout.occurred_fragment, container, false)
         view.occurrencesView.adapter = adapter
         view.occurrencesView.layoutManager = LinearLayoutManager(context)
+        view.ptr.setOnRefreshListener {
+            viewModel.getData()
+        }
         return view
     }
 
@@ -52,6 +55,8 @@ class OccurredFragment : Fragment() {
     private fun updateView(occurredViewState: OccurredViewState?) {
         occurredViewState?.let {
             adapter.setData(it.occurrences)
+            view?.ptr?.isRefreshing = false
         }
     }
+
 }
