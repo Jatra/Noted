@@ -51,7 +51,6 @@ class OccurredFragment : Fragment() {
         viewModel.occuredViewState.observe(this, Observer { updateView(it) })
     }
 
-    //INITIAL very basic. Assumes always some data, and slaps into a single text field.
     private fun updateView(occurredViewState: OccurredViewState?) {
         occurredViewState?.let {
             adapter.setData(it.occurrences)
