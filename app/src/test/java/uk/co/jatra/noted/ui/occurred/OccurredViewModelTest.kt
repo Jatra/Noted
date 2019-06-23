@@ -13,12 +13,13 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import uk.co.jatra.noted.network.Occurrence
-import uk.co.jatra.noted.repository.OccurrenceRepository
+import uk.co.jatra.noted.network.OccurrenceRequest
+import uk.co.jatra.noted.repository.Repository
 
 class OccurredViewModelTest {
 
     @RelaxedMockK
-    lateinit var repository: OccurrenceRepository
+    lateinit var repository: Repository<OccurrenceRequest, Occurrence>
     private val testScheduler: Scheduler = ImmediateThinScheduler.INSTANCE
     private val occurrence = Occurrence("id", "time", "user", "what", "detail")
 

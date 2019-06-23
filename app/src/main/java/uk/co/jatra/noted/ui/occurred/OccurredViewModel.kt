@@ -5,13 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
-import uk.co.jatra.noted.repository.OccurrenceRepository
+import uk.co.jatra.noted.network.Occurrence
+import uk.co.jatra.noted.network.OccurrenceRequest
+import uk.co.jatra.noted.repository.Repository
 import javax.inject.Inject
 import javax.inject.Named
 
 class OccurredViewModel(
-    val occurrenceRepository: OccurrenceRepository,
-    val mainScheduler: Scheduler
+    private val occurrenceRepository: Repository<OccurrenceRequest, Occurrence>,
+    private val mainScheduler: Scheduler
 ) : ViewModel() {
     val occuredViewState: MutableLiveData<OccurredViewState> = MutableLiveData()
     private val subscriptions = CompositeDisposable()
@@ -44,7 +46,7 @@ class OccurredViewModel(
 
 class OccurrenceViewModelFactory
 @Inject constructor(
-    private val repository: OccurrenceRepository,
+    private val repository: Repository<OccurrenceRequest, Occurrence>,
     @Named("Main") private val mainThreadScheduler: Scheduler
 ) :
     ViewModelProvider.Factory {

@@ -18,7 +18,7 @@ class SchedulerModule {
 
     @Provides
     @Named("Main")
-    fun providesMaincheduler(): Scheduler {
+    fun providesMainScheduler(): Scheduler {
         return AndroidSchedulers.mainThread()
     }
 }
