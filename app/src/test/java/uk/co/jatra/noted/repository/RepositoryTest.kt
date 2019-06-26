@@ -21,12 +21,12 @@ private const val AFTER_CACHE_TIME = BASE_TIME + cacheTimeToLive + 1
 private const val EVENT_ID = "eventId"
 private const val USER_ID = "userId"
 
-class OccurrenceRepositoryTest {
+class RepositoryTest {
     @RelaxedMockK
     private lateinit var timeHelper: TimeHelper
     @RelaxedMockK
     private lateinit var api: Api
-    private lateinit var repository: Repository<OccurrenceRequest, Occurrence>
+    private lateinit var occurrenceRepository: Repository<OccurrenceRequest, Occurrence>
 
     @Before
     fun setUp() {
@@ -34,19 +34,19 @@ class OccurrenceRepositoryTest {
         every { timeHelper.now } returns BASE_TIME
         every { api.getOccurences(any()) } returns just(listOf(mockk()))
         every { api.addOccurrence(any()) } returns just(mockk())
-        repository = Repository(ImmediateThinScheduler.INSTANCE, timeHelper, api::getOccurences, api::addOccurrence)
+        occurrenceRepository = Repository(ImmediateThinScheduler.INSTANCE, timeHelper, api::getOccurences, api::addOccurrence)
     }
 
     @Test
     fun `should call api for get`() {
-        repository.getData("foo")
+        occurrenceRepository.getData("foo")
         verify { api.getOccurences("foo") }
     }
 
     @Test
     fun `should call api for add`() {
         val request = OccurrenceRequest(USER_ID, EVENT_ID)
-        repository.addItem(request)
+        occurrenceRepository.addItem(request)
         verify { api.addOccurrence(request) }
     }
 
@@ -55,23 +55,23 @@ class OccurrenceRepositoryTest {
         val request = OccurrenceRequest(USER_ID, EVENT_ID)
         var newOccurence: Occurrence? = null
         var returnedData: List<Occurrence> = emptyList()
-        repository.getData("").subscribe()
-        repository.addItem(request).subscribe{ newValue -> newOccurence = newValue }
-        repository.getData("").subscribe { value -> returnedData = value }
+        occurrenceRepository.getData("").subscribe()
+        occurrenceRepository.addItem(request).subscribe{ newValue -> newOccurence = newValue }
+        occurrenceRepository.getData("").subscribe { value -> returnedData = value }
         assertThat(returnedData).contains(newOccurence)
     }
 
     @Test
     fun `should use cache`() {
-        repository.getData("foo").subscribe()
+        occurrenceRepository.getData("foo").subscribe()
         every { timeHelper.now } returns WITHIN_CACHE_TIME
-        repository.getData("foo").subscribe()
+        occurrenceRepository.getData("foo").subscribe()
         verify(atMost = 1) { api.getOccurences("foo") }
     }
 
     @Test
     fun `should not use cache`() {
-        repository.getData("foo").subscribe()
+        occurrenceRepository.getData("foo").subscribe()
         every { timeHelper.now } returns AFTER_CACHE_TIME
         verify(atMost = 1) { api.getOccurences("foo") }
     }

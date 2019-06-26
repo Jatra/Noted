@@ -19,4 +19,10 @@ interface Api {
 
     @POST("occurence")
     fun addOccurrence(@Body request: OccurrenceRequest) : Single<Occurrence>
+
+    @POST("event")
+    fun addEvent(@Body request: EventRequest) : Single<Event>
+
+    @POST("user")
+    fun addUser(@Body request: UserRequest) : Single<User>
 }
