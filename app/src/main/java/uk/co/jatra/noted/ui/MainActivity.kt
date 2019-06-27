@@ -6,12 +6,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import uk.co.jatra.noted.R
 
-private const val EVENTS_TAG = "EVENTS_TAG"
-private const val OCCURRENCE_TAG = "OCCURRENCE_TAG"
-private const val USERS_TAG = "USERS_TAG"
-
-private val TAG = MainActivity::class.java.simpleName
-
 class MainActivity : AppCompatActivity() {
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
