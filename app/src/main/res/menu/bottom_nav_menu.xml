@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/navigation_occurrences"
+            android:icon="@drawable/ic_round_event_available_24px"
+            android:title="@string/title_occurrences"/>
+    <item
+            android:id="@+id/navigation_users"
+            android:icon="@drawable/ic_round_people_24px"
+            android:title="@string/title_users"/>
+    <item
+            android:id="@+id/navigation_events"
+            android:icon="@drawable/ic_round_event_24px"
+            android:title="@string/title_events"/>
+</menu>

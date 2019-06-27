@@ -1,18 +1,18 @@
-package uk.co.jatra.noted.ui.occurred
+package uk.co.jatra.noted.ui.event
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
-import uk.co.jatra.noted.network.Occurrence
-import uk.co.jatra.noted.network.OccurrenceRequest
+import uk.co.jatra.noted.network.Event
+import uk.co.jatra.noted.network.EventRequest
 import uk.co.jatra.noted.repository.Repository
 
-class OccurredViewModel(
-    private val occurrenceRepository: Repository<OccurrenceRequest, Occurrence>,
+class EventViewModel(
+    private val eventRepository: Repository<EventRequest, Event>,
     private val mainScheduler: Scheduler
 ) : ViewModel() {
-    val occuredViewState: MutableLiveData<OccurredViewState> = MutableLiveData()
+    val eventViewState: MutableLiveData<EventViewState> = MutableLiveData()
     private val subscriptions = CompositeDisposable()
 
     //INITIAL. Always makes one request at start, no arguments.
@@ -28,13 +28,13 @@ class OccurredViewModel(
 
     fun getData() {
         subscriptions.add(
-            occurrenceRepository.getData("")
+            eventRepository.getData("")
                 .observeOn(mainScheduler)
                 .subscribe({ value ->
-                    occuredViewState.setValue(OccurredViewState(value))
+                    eventViewState.setValue(EventViewState(value))
                 }, {
                     //viewstate should have something for errors
-                    occuredViewState.setValue(OccurredViewState(emptyList()))
+                    eventViewState.setValue(EventViewState(emptyList()))
                 }
                 )
         )

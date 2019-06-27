@@ -9,21 +9,24 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.occurred_fragment.view.*
+import kotlinx.android.synthetic.main.occurrence.view.*
 import uk.co.jatra.noted.NotedApplication
 import uk.co.jatra.noted.R
+import uk.co.jatra.noted.network.Occurrence
+import uk.co.jatra.noted.network.OccurrenceRequest
+import uk.co.jatra.noted.ui.Adapter
+import uk.co.jatra.noted.ui.NotedViewModelFactory
+import uk.co.jatra.noted.ui.ViewHolder
 import javax.inject.Inject
 
-//INITIAL BASIC fragment created by Android Studio from ViewModel template
 class OccurredFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = OccurredFragment()
-    }
 
     private lateinit var viewModel: OccurredViewModel
     @Inject
-    lateinit var viewModelFactory: OccurrenceViewModelFactory
-    private val adapter = OccurredAdapter()
+    lateinit var viewModelFactory: NotedViewModelFactory<OccurrenceRequest, Occurrence, OccurredViewModel>
+    private val adapter = Adapter(R.layout.occurrence) {
+        OccurrenceViewHolder(it)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,5 +60,15 @@ class OccurredFragment : Fragment() {
             view?.ptr?.isRefreshing = false
         }
     }
+}
 
+class OccurrenceViewHolder(itemView: View) : ViewHolder<Occurrence>(itemView) {
+    override fun bind(item: Occurrence) {
+        with(itemView) {
+            whoView.text = item.user
+            whenView.text = item.time
+            idView.text = item.id
+            dataView.text = item.what
+        }
+    }
 }
