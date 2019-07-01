@@ -9,8 +9,8 @@ import uk.co.jatra.noted.network.*
 import uk.co.jatra.noted.repository.Repository
 import uk.co.jatra.noted.ui.NotedViewModelFactory
 import uk.co.jatra.noted.ui.event.EventViewModel
-import uk.co.jatra.noted.ui.event.UserViewModel
-import uk.co.jatra.noted.ui.occurred.OccurredViewModel
+import uk.co.jatra.noted.ui.occurrence.OccurrenceViewModel
+import uk.co.jatra.noted.ui.user.UserViewModel
 import uk.co.jatra.noted.utils.TimeHelper
 import javax.inject.Named
 import javax.inject.Singleton
@@ -22,6 +22,7 @@ class AppModule(private val app: Application) {
     fun providesContext(): Context = app
 
     @Provides
+    @Singleton
     fun providesOccurrenceRepository(
         api: Api, @Named("IOScheduler") ioScheduler: Scheduler,
         timeHelper: TimeHelper
@@ -35,6 +36,7 @@ class AppModule(private val app: Application) {
     }
 
     @Provides
+    @Singleton
     fun providesEventRepository(
         api: Api, @Named("IOScheduler") ioScheduler: Scheduler,
         timeHelper: TimeHelper
@@ -49,6 +51,7 @@ class AppModule(private val app: Application) {
 
 
     @Provides
+    @Singleton
     fun providesUserRepository(
         api: Api, @Named("IOScheduler") ioScheduler: Scheduler,
         timeHelper: TimeHelper
@@ -62,6 +65,7 @@ class AppModule(private val app: Application) {
     }
 
     @Provides
+    @Singleton
     fun providesEventViewModelFactory(
         eventRepository: Repository<EventRequest, Event>,
         @Named("Main") mainThreadScheduler: Scheduler
@@ -73,17 +77,19 @@ class AppModule(private val app: Application) {
     }
 
     @Provides
+    @Singleton
     fun providesOccurrenceViewModelFactory(
         occurrenceRepository: Repository<OccurrenceRequest, Occurrence>,
         @Named("Main") mainThreadScheduler: Scheduler
-    ) : NotedViewModelFactory<OccurrenceRequest, Occurrence, OccurredViewModel> {
+    ) : NotedViewModelFactory<OccurrenceRequest, Occurrence, OccurrenceViewModel> {
         return NotedViewModelFactory(
             occurrenceRepository,
             mainThreadScheduler
-        ) { repository, scheduler -> OccurredViewModel(repository, scheduler) }
+        ) { repository, scheduler -> OccurrenceViewModel(repository, scheduler) }
     }
 
     @Provides
+    @Singleton
     fun providesUserViewModelFactory(
         userRepository: Repository<UserRequest, User>,
         @Named("Main") mainThreadScheduler: Scheduler

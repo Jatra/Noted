@@ -2,10 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/occurred"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/users"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.occurred.OccurredFragment">
+        tools:context=".ui.occurrence.OccurrenceFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/ptr"
@@ -20,5 +21,16 @@
                 tools:itemCount="5">
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="64dp"
+            android:layout_marginEnd="@dimen/fab_margin"
+            app:srcCompat="@drawable/ic_round_add_24px"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

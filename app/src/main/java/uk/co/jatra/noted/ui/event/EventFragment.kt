@@ -15,9 +15,9 @@ import uk.co.jatra.noted.NotedApplication
 import uk.co.jatra.noted.R
 import uk.co.jatra.noted.network.Event
 import uk.co.jatra.noted.network.EventRequest
-import uk.co.jatra.noted.ui.Adapter
+import uk.co.jatra.noted.ui.NotedAdapter
+import uk.co.jatra.noted.ui.NotedViewHolder
 import uk.co.jatra.noted.ui.NotedViewModelFactory
-import uk.co.jatra.noted.ui.ViewHolder
 import javax.inject.Inject
 
 class EventFragment : Fragment() {
@@ -25,7 +25,7 @@ class EventFragment : Fragment() {
     private lateinit var viewModel: EventViewModel
     @Inject
     lateinit var viewModelFactory: NotedViewModelFactory<EventRequest, Event, EventViewModel>
-    private val adapter = Adapter(R.layout.event) {
+    private val adapter = NotedAdapter(R.layout.event) {
         EventViewHolder(it)
     }
 
@@ -64,7 +64,7 @@ class EventFragment : Fragment() {
 }
 
 
-class EventViewHolder(itemView: View) : ViewHolder<Event>(itemView) {
+class EventViewHolder(itemView: View) : NotedViewHolder<Event>(itemView) {
     override fun bind(item: Event) {
         with(itemView) {
             idView.text = item.id

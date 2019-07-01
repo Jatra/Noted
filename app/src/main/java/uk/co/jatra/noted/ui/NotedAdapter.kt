@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 
-class Adapter<T, VH: ViewHolder<T>>
+class NotedAdapter<T, VH: NotedViewHolder<T>>
 constructor(
     @LayoutRes val itemLayout: Int,
     val viewHolderCreator: (view: View) -> VH
@@ -34,6 +34,6 @@ constructor(
 
 }
 
-abstract class ViewHolder<T>(itemView: View)  : RecyclerView.ViewHolder(itemView) {
+abstract class NotedViewHolder<T>(itemView: View)  : RecyclerView.ViewHolder(itemView) {
     abstract fun bind(item: T)
 }

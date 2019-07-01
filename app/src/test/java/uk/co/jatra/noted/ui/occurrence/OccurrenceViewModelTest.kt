@@ -1,4 +1,4 @@
-package uk.co.jatra.noted.ui.occurred
+package uk.co.jatra.noted.ui.occurrence
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import io.mockk.MockKAnnotations
@@ -16,7 +16,7 @@ import uk.co.jatra.noted.network.Occurrence
 import uk.co.jatra.noted.network.OccurrenceRequest
 import uk.co.jatra.noted.repository.Repository
 
-class OccurredViewModelTest {
+class OccurrenceViewModelTest {
 
     @RelaxedMockK
     lateinit var repository: Repository<OccurrenceRequest, Occurrence>
@@ -35,14 +35,14 @@ class OccurredViewModelTest {
 
     @Test
     fun `should make initial request`() {
-        OccurredViewModel(repository, testScheduler)
+        OccurrenceViewModel(repository, testScheduler)
         verify { repository.getData("") }
     }
 
     @Test
     fun `should set view state`() {
         every { repository.getData("") } returns Single.just(listOf(occurrence))
-        val occurredViewModel = OccurredViewModel(repository, testScheduler)
-        assertThat(occurredViewModel.occuredViewState.value).isEqualTo(OccurredViewState(listOf(occurrence)))
+        val occurredViewModel = OccurrenceViewModel(repository, testScheduler)
+        assertThat(occurredViewModel.occuredViewState.value).isEqualTo(OccurrenceViewState(listOf(occurrence)))
     }
 }

@@ -1,4 +1,4 @@
-package uk.co.jatra.noted.ui.event
+package uk.co.jatra.noted.ui.user
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,10 +9,10 @@ import uk.co.jatra.noted.network.UserRequest
 import uk.co.jatra.noted.repository.Repository
 
 class UserViewModel(
-    private val eventRepository: Repository<UserRequest, User>,
+    private val userRepository: Repository<UserRequest, User>,
     private val mainScheduler: Scheduler
 ) : ViewModel() {
-    val eventViewState: MutableLiveData<UserViewState> = MutableLiveData()
+    val userViewState: MutableLiveData<UserViewState> = MutableLiveData()
     private val subscriptions = CompositeDisposable()
 
     //INITIAL. Always makes one request at start, no arguments.
@@ -28,13 +28,13 @@ class UserViewModel(
 
     fun getData() {
         subscriptions.add(
-            eventRepository.getData("")
+            userRepository.getData("")
                 .observeOn(mainScheduler)
                 .subscribe({ value ->
-                    eventViewState.setValue(UserViewState(value))
+                    userViewState.setValue(UserViewState(value))
                 }, {
                     //viewstate should have something for errors
-                    eventViewState.setValue(UserViewState(emptyList()))
+                    userViewState.setValue(UserViewState(emptyList()))
                 }
                 )
         )
