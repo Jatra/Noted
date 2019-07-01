@@ -28,6 +28,7 @@ class AddOccurrenceBottomSheet : BottomSheetDialogFragment() {
         val view = inflater.inflate(R.layout.add_occurrence_dialog, null)
         view.addButton.setOnClickListener {
             viewModel.addOccurrence(view.spinner.selectedItem as Event, "1")
+            dismiss()
         }
 
         return view
