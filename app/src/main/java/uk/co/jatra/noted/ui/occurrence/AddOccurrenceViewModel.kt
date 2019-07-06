@@ -23,6 +23,7 @@ class AddOccurrenceViewModel
 
     val addOccurenceViewState: MutableLiveData<EventViewState> = MutableLiveData()
     private val subscriptions = CompositeDisposable()
+    val done: MutableLiveData<OneShot> = MutableLiveData()
 
     //INITIAL. Always makes one request at start, no arguments.
     //TODO add some querying.
@@ -43,7 +44,7 @@ class AddOccurrenceViewModel
                     addOccurenceViewState.setValue(EventViewState(value))
                 }, {
                     //viewstate should have something for errors
-                    addOccurenceViewState.setValue(EventViewState(emptyList()))
+                    addOccurenceViewState.value = EventViewState(emptyList())
                 }
                 )
         )
@@ -54,9 +55,26 @@ class AddOccurrenceViewModel
             occurrenceRepository.addItem(OccurrenceRequest(userId, event.id))
                 .subscribe({
                     Log.d("AddOccurrence", "Success $it")
+                    done()
                 }, {
                     Log.e("AddOccurrence", "Error", it)
                 })
         )
     }
+
+    private fun done() {
+        done.postValue(OneShot())
+    }
+}
+
+class OneShot {
+    private var handled = false
+
+    fun isHandled(): Boolean {
+        val previous = handled
+        handled = true
+        return previous
+    }
+
+    fun unHandled() = !isHandled()
 }
