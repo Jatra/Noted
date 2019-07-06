@@ -28,7 +28,7 @@ class EventViewModel(
 
     fun getData() {
         subscriptions.add(
-            eventRepository.getData("")
+            eventRepository.getData()
                 .observeOn(mainScheduler)
                 .subscribe({ value ->
                     eventViewState.setValue(EventViewState(value))

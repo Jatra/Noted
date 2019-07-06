@@ -28,7 +28,7 @@ class UserViewModel(
 
     fun getData() {
         subscriptions.add(
-            userRepository.getData("")
+            userRepository.getData()
                 .observeOn(mainScheduler)
                 .subscribe({ value ->
                     userViewState.setValue(UserViewState(value))

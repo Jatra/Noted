@@ -7,12 +7,33 @@ import uk.co.jatra.noted.ui.occurrence.OccurrenceFragment
 import uk.co.jatra.noted.ui.user.UserFragment
 import javax.inject.Singleton
 
-//Specify which classes need injection, using which module.
+/**
+ * Dagger app component defining the injections possible
+ */
 @Component(modules = [AppModule::class, ApiModule::class, SchedulerModule::class])
 @Singleton
 interface AppComponent {
+    /**
+     * Inject into the EventFragment
+     * param[target] The [EventFragment]
+     */
     fun inject(target: EventFragment)
+
+    /**
+     * Inject into the UserFragment
+     * param[target] The [UserFragment]
+     */
     fun inject(target: UserFragment)
+
+    /**
+     * Inject into the OccurrenceFragment
+     * param[target] The [OccurrenceFragment]
+     */
     fun inject(target: OccurrenceFragment)
+
+    /**
+     * Inject into the AddOccurrenceBottomSheet
+     * param[target] The [AddOccurrenceBottomSheet]
+     */
     fun inject(target: AddOccurrenceBottomSheet)
 }

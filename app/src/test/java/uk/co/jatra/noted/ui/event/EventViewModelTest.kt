@@ -36,12 +36,12 @@ class EventViewModelTest {
     @Test
     fun `should make initial request`() {
         EventViewModel(repository, testScheduler)
-        verify { repository.getData("") }
+        verify { repository.getData() }
     }
 
     @Test
     fun `should set view state`() {
-        every { repository.getData("") } returns Single.just(listOf(event))
+        every { repository.getData() } returns Single.just(listOf(event))
         val occurredViewModel = EventViewModel(repository, testScheduler)
         Assertions.assertThat(occurredViewModel.eventViewState.value).isEqualTo(EventViewState(listOf(event)))
     }

@@ -37,7 +37,7 @@ class AddOccurrenceViewModel
 
     fun getData() {
         subscriptions.add(
-            eventRepository.getData("")
+            eventRepository.getData()
                 .observeOn(mainThreadScheduler)
                 .subscribe({ value ->
                     addOccurenceViewState.setValue(EventViewState(value))

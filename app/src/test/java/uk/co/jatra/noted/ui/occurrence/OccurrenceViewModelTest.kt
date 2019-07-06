@@ -36,12 +36,12 @@ class OccurrenceViewModelTest {
     @Test
     fun `should make initial request`() {
         OccurrenceViewModel(repository, testScheduler)
-        verify { repository.getData("") }
+        verify { repository.getData() }
     }
 
     @Test
     fun `should set view state`() {
-        every { repository.getData("") } returns Single.just(listOf(occurrence))
+        every { repository.getData() } returns Single.just(listOf(occurrence))
         val occurredViewModel = OccurrenceViewModel(repository, testScheduler)
         assertThat(occurredViewModel.occuredViewState.value).isEqualTo(OccurrenceViewState(listOf(occurrence)))
     }

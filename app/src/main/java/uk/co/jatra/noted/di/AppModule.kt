@@ -15,12 +15,30 @@ import uk.co.jatra.noted.utils.TimeHelper
 import javax.inject.Named
 import javax.inject.Singleton
 
+/**
+ * AppModule.
+ *
+ * Provides of classes to satisfy Dagger dependency.
+ */
 @Module
 class AppModule(private val app: Application) {
+    /**
+     * provide the Application Context
+     *
+     * @return the Application [Context]
+     */
     @Provides
     @Singleton
     fun providesContext(): Context = app
 
+    /**
+     * provide the Occurrence Repository
+     *
+     * @param[api] a instance of the client side of the [Api]
+     * @param[ioScheduler] the Rx [Scheduler] on which to make api calls
+     * @param[timeHelper] an instance of [TimeHelper] for cache timing
+     * @return A [Repository] for [Occurrence]
+     */
     @Provides
     @Singleton
     fun providesOccurrenceRepository(
@@ -35,6 +53,14 @@ class AppModule(private val app: Application) {
         )
     }
 
+    /**
+     * provide the Event Repository
+     *
+     * @param[api] a instance of the client side of the [Api]
+     * @param[ioScheduler] the Rx [Scheduler] on which to make api calls
+     * @param[timeHelper] an instance of [TimeHelper] for cache timing
+     * @return A [Repository] for [Event]
+     */
     @Provides
     @Singleton
     fun providesEventRepository(
@@ -49,7 +75,14 @@ class AppModule(private val app: Application) {
         )
     }
 
-
+    /**
+     * provide the User Repository
+     *
+     * @param[api] a instance of the client side of the [Api]
+     * @param[ioScheduler] the Rx [Scheduler] on which to make api calls
+     * @param[timeHelper] an instance of [TimeHelper] for cache timing
+     * @return A [Repository] for [User]
+     */
     @Provides
     @Singleton
     fun providesUserRepository(
@@ -64,6 +97,13 @@ class AppModule(private val app: Application) {
         )
     }
 
+    /**
+     * provide the Factory for generating [EventViewModel]
+     *
+     * @param[eventRepository] the Event Repository
+     * @param[mainThreadScheduler] the Main Thread Rx [Scheduler]
+     * @return A [NotedViewModelFactory] that can supply [EventViewModel]
+     */
     @Provides
     @Singleton
     fun providesEventViewModelFactory(
@@ -76,6 +116,13 @@ class AppModule(private val app: Application) {
         ) { repository, scheduler -> EventViewModel(repository, scheduler) }
     }
 
+    /**
+     * provide the Factory for generating [OccurrenceViewModel]
+     *
+     * @param[occurrenceRepository] the Occurrence Repository
+     * @param[mainThreadScheduler] the Main Thread Rx [Scheduler]
+     * @return A [NotedViewModelFactory] that can supply [OccurrenceViewModel]
+     */
     @Provides
     @Singleton
     fun providesOccurrenceViewModelFactory(
@@ -88,6 +135,13 @@ class AppModule(private val app: Application) {
         ) { repository, scheduler -> OccurrenceViewModel(repository, scheduler) }
     }
 
+    /**
+     * provide the Factory for generating [UserViewModel]
+     *
+     * @param[userRepository] the Occurrence Repository
+     * @param[mainThreadScheduler] the Main Thread Rx [Scheduler]
+     * @return A [NotedViewModelFactory] that can supply [UserViewModel]
+     */
     @Provides
     @Singleton
     fun providesUserViewModelFactory(

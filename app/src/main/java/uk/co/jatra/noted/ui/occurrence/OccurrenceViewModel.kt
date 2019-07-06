@@ -28,7 +28,7 @@ class OccurrenceViewModel(
 
     fun getData() {
         subscriptions.add(
-            occurrenceRepository.getData("")
+            occurrenceRepository.getData()
                 .observeOn(mainScheduler)
                 .subscribe({ value ->
                     occuredViewState.setValue(OccurrenceViewState(value))

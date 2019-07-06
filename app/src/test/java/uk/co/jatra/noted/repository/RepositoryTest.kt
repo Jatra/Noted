@@ -32,15 +32,15 @@ class RepositoryTest {
     fun setUp() {
         MockKAnnotations.init(this)
         every { timeHelper.now } returns BASE_TIME
-        every { api.getOccurences(any()) } returns just(listOf(mockk()))
+        every { api.getOccurences() } returns just(listOf(mockk()))
         every { api.addOccurrence(any()) } returns just(mockk())
         occurrenceRepository = Repository(ImmediateThinScheduler.INSTANCE, timeHelper, api::getOccurences, api::addOccurrence)
     }
 
     @Test
     fun `should call api for get`() {
-        occurrenceRepository.getData("foo")
-        verify { api.getOccurences("foo") }
+        occurrenceRepository.getData()
+        verify { api.getOccurences() }
     }
 
     @Test
@@ -55,24 +55,24 @@ class RepositoryTest {
         val request = OccurrenceRequest(USER_ID, EVENT_ID)
         var newOccurence: Occurrence? = null
         var returnedData: List<Occurrence> = emptyList()
-        occurrenceRepository.getData("").subscribe()
+        occurrenceRepository.getData().subscribe()
         occurrenceRepository.addItem(request).subscribe{ newValue -> newOccurence = newValue }
-        occurrenceRepository.getData("").subscribe { value -> returnedData = value }
+        occurrenceRepository.getData().subscribe { value -> returnedData = value }
         assertThat(returnedData).contains(newOccurence)
     }
 
     @Test
     fun `should use cache`() {
-        occurrenceRepository.getData("foo").subscribe()
+        occurrenceRepository.getData().subscribe()
         every { timeHelper.now } returns WITHIN_CACHE_TIME
-        occurrenceRepository.getData("foo").subscribe()
-        verify(atMost = 1) { api.getOccurences("foo") }
+        occurrenceRepository.getData().subscribe()
+        verify(atMost = 1) { api.getOccurences() }
     }
 
     @Test
     fun `should not use cache`() {
-        occurrenceRepository.getData("foo").subscribe()
+        occurrenceRepository.getData().subscribe()
         every { timeHelper.now } returns AFTER_CACHE_TIME
-        verify(atMost = 1) { api.getOccurences("foo") }
+        verify(atMost = 1) { api.getOccurences() }
     }
 }

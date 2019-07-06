@@ -10,8 +10,17 @@ import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 
+/**
+ * Provides the client side Retorfit implementation of the API
+ *
+ * @property [baseUrl] the baseUrl of the service
+ */
 @Singleton
 class RestAdapter @Inject constructor(@Named("BaseUrl") val baseUrl: String) {
+
+    /**
+     * the [Api] implementation
+     */
     val api by lazy {
         createApi()
     }
