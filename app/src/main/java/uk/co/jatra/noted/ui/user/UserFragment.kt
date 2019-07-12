@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.occurrence.view.idView
 import kotlinx.android.synthetic.main.user.view.*
 import kotlinx.android.synthetic.main.user_fragment.view.*
 import uk.co.jatra.noted.NotedApplication

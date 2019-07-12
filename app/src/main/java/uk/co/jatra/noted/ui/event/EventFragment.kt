@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.event.view.*
 import kotlinx.android.synthetic.main.event_fragment.view.*
-import kotlinx.android.synthetic.main.occurrence.view.idView
 import uk.co.jatra.noted.NotedApplication
 import uk.co.jatra.noted.R
 import uk.co.jatra.noted.network.Event

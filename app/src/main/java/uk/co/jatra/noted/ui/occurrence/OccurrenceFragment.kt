@@ -71,7 +71,6 @@ class OccurrenceViewHolder(itemView: View) : NotedViewHolder<Occurrence>(itemVie
         with(itemView) {
             whoView.text = item.user
             whenView.text = item.time
-            idView.text = item.id
             dataView.text = item.what
         }
     }
