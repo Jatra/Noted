@@ -14,7 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.add_occurrence_dialog.view.*
 import uk.co.jatra.noted.R
 import uk.co.jatra.noted.di.AppComponent
-import uk.co.jatra.noted.network.Event
+import uk.co.jatra.noted.model.Event
 import uk.co.jatra.noted.ui.event.EventViewState
 import javax.inject.Inject
 
@@ -36,13 +36,13 @@ class AddOccurrenceBottomSheet : BottomSheetDialogFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         viewModel = ViewModelProviders.of(this, addOccurrenceViewModelFactory).get(AddOccurrenceViewModel::class.java)
-        viewModel.addOccurenceViewState.observe(this, Observer { updateView(it) })
+        viewModel.addOccurrenceViewState.observe(this, Observer { updateView(it) })
         viewModel.done.observe(this, Observer { if (it.unHandled()) dismiss() })
     }
 
     private fun updateView(eventViewState: EventViewState?) {
         eventViewState?.let {
-            val eventNames = it.events.map { event -> event.eventName }
+            val eventNames = it.events.map { event -> event.name }
             Log.d("SHEET", eventNames.toString())
             adapter = EventSpinnerAdapter(context!!, it.events)
             view?.spinner?.adapter = adapter
@@ -62,13 +62,13 @@ class AddOccurrenceBottomSheet : BottomSheetDialogFragment() {
 class EventSpinnerAdapter(context: Context, events: List<Event>): ArrayAdapter<Event>(context, R.layout.spinner_item, events) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = super.getView(position, convertView, parent) as TextView
-        view.text = getItem(position)?.eventName ?: ""
+        view.text = getItem(position)?.name ?: ""
         return view
     }
 
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = super.getDropDownView(position, convertView, parent) as TextView
-        view.text = getItem(position)?.eventName ?: ""
+        view.text = getItem(position)?.name ?: ""
         return view
     }
 }

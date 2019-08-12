@@ -4,6 +4,7 @@ import io.reactivex.Single
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import uk.co.jatra.noted.model.Event
 
 /**
  * Definition of the Server API for Retrofit generation.

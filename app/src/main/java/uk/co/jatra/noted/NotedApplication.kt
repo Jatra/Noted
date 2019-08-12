@@ -14,13 +14,13 @@ class NotedApplication: Application() {
         appComponent = initDagger(this, serverUrl)
     }
 
-    //as yet app is not used.
     //Virtually all apps actually need a context injected.
     private fun initDagger(app: NotedApplication, serverUrl: String): AppComponent =
         //Component named DaggerX is defined by interface X, so see AppComponent
         DaggerAppComponent.builder()
             .apiModule(ApiModule(serverUrl))
             .appModule(AppModule(this))
+            .persistenceModule(PersistenceModule())
             .schedulerModule(SchedulerModule())
             .build()
 

@@ -12,18 +12,16 @@ import kotlinx.android.synthetic.main.user.view.*
 import kotlinx.android.synthetic.main.user_fragment.view.*
 import uk.co.jatra.noted.NotedApplication
 import uk.co.jatra.noted.R
-import uk.co.jatra.noted.network.User
-import uk.co.jatra.noted.network.UserRequest
+import uk.co.jatra.noted.model.User
 import uk.co.jatra.noted.ui.NotedAdapter
 import uk.co.jatra.noted.ui.NotedViewHolder
-import uk.co.jatra.noted.ui.NotedViewModelFactory
 import javax.inject.Inject
 
 class UserFragment : Fragment() {
 
     private lateinit var viewModel: UserViewModel
     @Inject
-    lateinit var viewModelFactory: NotedViewModelFactory<UserRequest, User, UserViewModel>
+    lateinit var viewModelFactory: UserViewModelFactory
     private val adapter = NotedAdapter(R.layout.user) {
         UserViewHolder(it)
     }
@@ -65,7 +63,7 @@ class UserFragment : Fragment() {
 class UserViewHolder(itemView: View) : NotedViewHolder<User>(itemView) {
     override fun bind(item: User) {
         with(itemView) {
-            idView.text = item.id
+            idView.text = item.id.toString()
             nameView.text = item.name
             notesView.text = item.notes
         }

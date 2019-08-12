@@ -19,7 +19,7 @@ private const val cacheTimeToLive = TEN_SECONDS
  * @param[fetcher] the function to fetch new data
  * @param[addFunction] the function to add new instances
  */
-class Repository<R, T>  @Inject constructor(
+class PersistenceBackedRepository<R, T> @Inject constructor(
     @Named("IOScheduler") val ioScheduler: Scheduler,
     private val timeHelper: TimeHelper,
     private val fetcher: () -> Single<List<T>>,

@@ -3,21 +3,20 @@ package uk.co.jatra.noted.ui.occurrence
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import io.reactivex.Scheduler
-import uk.co.jatra.noted.network.Event
-import uk.co.jatra.noted.network.EventRequest
-import uk.co.jatra.noted.network.Occurrence
-import uk.co.jatra.noted.network.OccurrenceRequest
-import uk.co.jatra.noted.repository.Repository
+import uk.co.jatra.noted.repository.EventRepository
+import uk.co.jatra.noted.repository.OccurrenceRepository
+import uk.co.jatra.noted.repository.UserRepository
 import javax.inject.Inject
 import javax.inject.Named
 
 class AddOccurrenceViewModelFactory @Inject constructor(
-    private val eventRepository: Repository<EventRequest, Event>,
-    private val occurrenceRepository: Repository<OccurrenceRequest, Occurrence>,
+    private val eventRepository: EventRepository,
+    private val occurrenceRepository: OccurrenceRepository,
+    val userRepository: UserRepository,
     @Named("Main") val mainThreadScheduler: Scheduler
 
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return AddOccurrenceViewModel(occurrenceRepository, eventRepository, mainThreadScheduler) as T
+        return AddOccurrenceViewModel(occurrenceRepository, eventRepository, userRepository, mainThreadScheduler) as T
     }
 }

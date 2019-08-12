@@ -5,23 +5,27 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
-import uk.co.jatra.noted.network.Event
-import uk.co.jatra.noted.network.EventRequest
-import uk.co.jatra.noted.network.Occurrence
-import uk.co.jatra.noted.network.OccurrenceRequest
-import uk.co.jatra.noted.repository.Repository
+import uk.co.jatra.noted.model.Event
+import uk.co.jatra.noted.model.Occurrence
+import uk.co.jatra.noted.model.User
+import uk.co.jatra.noted.repository.EventRepository
+import uk.co.jatra.noted.repository.OccurrenceRepository
+import uk.co.jatra.noted.repository.UserRepository
 import uk.co.jatra.noted.ui.event.EventViewState
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 
 class AddOccurrenceViewModel
     @Inject constructor(
-        private val occurrenceRepository: Repository<OccurrenceRequest, Occurrence>,
-        private val eventRepository: Repository<EventRequest, Event>,
+        private val occurrenceRepository: OccurrenceRepository,
+        private val eventRepository: EventRepository,
+        private val userRepository: UserRepository,
         @Named("Main") val mainThreadScheduler: Scheduler
     ): ViewModel() {
 
-    val addOccurenceViewState: MutableLiveData<EventViewState> = MutableLiveData()
+    private var users: List<User>? = emptyList()
+    val addOccurrenceViewState: MutableLiveData<EventViewState> = MutableLiveData()
     private val subscriptions = CompositeDisposable()
     val done: MutableLiveData<OneShot> = MutableLiveData()
 
@@ -38,13 +42,13 @@ class AddOccurrenceViewModel
 
     fun getData() {
         subscriptions.add(
-            eventRepository.getData()
+            eventRepository.getAllEvents()
                 .observeOn(mainThreadScheduler)
                 .subscribe({ value ->
-                    addOccurenceViewState.setValue(EventViewState(value))
+                    addOccurrenceViewState.setValue(EventViewState(value))
                 }, {
                     //viewstate should have something for errors
-                    addOccurenceViewState.value = EventViewState(emptyList())
+                    addOccurrenceViewState.value = EventViewState(emptyList())
                 }
                 )
         )
@@ -52,12 +56,19 @@ class AddOccurrenceViewModel
 
     fun addOccurrence(event: Event, userId: String) {
         subscriptions.add(
-            occurrenceRepository.addItem(OccurrenceRequest(userId, event.id))
+            occurrenceRepository.addOccurrence(
+                Occurrence(
+                    userId = userId,
+                    time = Date().toString(),
+                    eventId = event.id.toString(),
+                    detail = event.name + " " + event.description
+                )
+            )
                 .subscribe({
-                    Log.d("AddOccurrence", "Success $it")
+                    Log.d("AOVM", "Success")
                     done()
                 }, {
-                    Log.e("AddOccurrence", "Error", it)
+                    Log.e("AOVM", "Error", it)
                 })
         )
     }
@@ -70,11 +81,11 @@ class AddOccurrenceViewModel
 class OneShot {
     private var handled = false
 
-    fun isHandled(): Boolean {
+    fun unHandled() = !isHandled()
+
+    private fun isHandled(): Boolean {
         val previous = handled
         handled = true
         return previous
     }
-
-    fun unHandled() = !isHandled()
 }

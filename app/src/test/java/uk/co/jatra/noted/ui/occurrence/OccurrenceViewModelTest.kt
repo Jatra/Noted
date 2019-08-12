@@ -5,23 +5,25 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.verify
+import io.reactivex.Flowable
 import io.reactivex.Scheduler
-import io.reactivex.Single
 import io.reactivex.internal.schedulers.ImmediateThinScheduler
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import uk.co.jatra.noted.network.Occurrence
-import uk.co.jatra.noted.network.OccurrenceRequest
-import uk.co.jatra.noted.repository.Repository
+import uk.co.jatra.noted.model.Occurrence
+import uk.co.jatra.noted.repository.OccurrenceRepository
+import uk.co.jatra.noted.repository.UserRepository
 
 class OccurrenceViewModelTest {
 
     @RelaxedMockK
-    lateinit var repository: Repository<OccurrenceRequest, Occurrence>
+    lateinit var occurrenceRepository: OccurrenceRepository
+    @RelaxedMockK
+    lateinit var userRepository: UserRepository
     private val testScheduler: Scheduler = ImmediateThinScheduler.INSTANCE
-    private val occurrence = Occurrence("id", "time", "user", "what", "detail")
+    private val occurrence = Occurrence(1, "time", "user", "what", "detail")
 
     @Rule
     @JvmField
@@ -35,14 +37,14 @@ class OccurrenceViewModelTest {
 
     @Test
     fun `should make initial request`() {
-        OccurrenceViewModel(repository, testScheduler)
-        verify { repository.getData() }
+        OccurrenceViewModel(occurrenceRepository, userRepository, testScheduler)
+        verify { occurrenceRepository.getAllOccurrences() }
     }
 
     @Test
     fun `should set view state`() {
-        every { repository.getData() } returns Single.just(listOf(occurrence))
-        val occurredViewModel = OccurrenceViewModel(repository, testScheduler)
+        every { occurrenceRepository.getAllOccurrences() } returns Flowable.just(listOf(occurrence))
+        val occurredViewModel = OccurrenceViewModel(occurrenceRepository, userRepository, testScheduler)
         assertThat(occurredViewModel.occuredViewState.value).isEqualTo(OccurrenceViewState(listOf(occurrence)))
     }
 }

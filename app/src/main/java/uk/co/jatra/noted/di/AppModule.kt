@@ -5,13 +5,23 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Scheduler
-import uk.co.jatra.noted.network.*
+import uk.co.jatra.noted.model.Event
+import uk.co.jatra.noted.model.Occurrence
+import uk.co.jatra.noted.model.User
+import uk.co.jatra.noted.network.EventRequest
+import uk.co.jatra.noted.network.OccurrenceRequest
+import uk.co.jatra.noted.network.UserRequest
+import uk.co.jatra.noted.persistence.EventDao
+import uk.co.jatra.noted.persistence.OccurrenceDao
+import uk.co.jatra.noted.persistence.UserDao
+import uk.co.jatra.noted.repository.EventRepository
+import uk.co.jatra.noted.repository.OccurrenceRepository
 import uk.co.jatra.noted.repository.Repository
+import uk.co.jatra.noted.repository.UserRepository
 import uk.co.jatra.noted.ui.NotedViewModelFactory
 import uk.co.jatra.noted.ui.event.EventViewModel
 import uk.co.jatra.noted.ui.occurrence.OccurrenceViewModel
 import uk.co.jatra.noted.ui.user.UserViewModel
-import uk.co.jatra.noted.utils.TimeHelper
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -32,70 +42,47 @@ class AppModule(private val app: Application) {
     fun providesContext(): Context = app
 
     /**
-     * provide the Occurrence Repository
-     *
-     * @param[api] a instance of the client side of the [Api]
-     * @param[ioScheduler] the Rx [Scheduler] on which to make api calls
-     * @param[timeHelper] an instance of [TimeHelper] for cache timing
-     * @return A [Repository] for [Occurrence]
-     */
-    @Provides
-    @Singleton
-    fun providesOccurrenceRepository(
-        api: Api, @Named("IOScheduler") ioScheduler: Scheduler,
-        timeHelper: TimeHelper
-    ): Repository<OccurrenceRequest, Occurrence> {
-        return Repository(
-            ioScheduler,
-            timeHelper,
-            api::getOccurences,
-            api::addOccurrence
-        )
-    }
-
-    /**
      * provide the Event Repository
      *
-     * @param[api] a instance of the client side of the [Api]
      * @param[ioScheduler] the Rx [Scheduler] on which to make api calls
-     * @param[timeHelper] an instance of [TimeHelper] for cache timing
      * @return A [Repository] for [Event]
      */
     @Provides
     @Singleton
     fun providesEventRepository(
-        api: Api, @Named("IOScheduler") ioScheduler: Scheduler,
-        timeHelper: TimeHelper
-    ): Repository<EventRequest, Event> {
-        return Repository(
-            ioScheduler,
-            timeHelper,
-            api::getEvents,
-            api::addEvent
-        )
+        eventDao: EventDao,
+        @Named("IOScheduler") ioScheduler: Scheduler
+    ): EventRepository {
+        return EventRepository(eventDao, ioScheduler)
+    }
+
+    /**
+     * provide the Occurrence Repository
+     *
+     * @param[ioScheduler] the Rx [Scheduler] on which to make api calls
+     * @return A [Repository] for [Occurrence]
+     */
+    @Provides
+    @Singleton
+    fun providesOccurrenceRepository(
+        occurrenceDao: OccurrenceDao,
+        @Named("IOScheduler") ioScheduler: Scheduler
+    ): OccurrenceRepository {
+        return OccurrenceRepository(occurrenceDao, ioScheduler)
     }
 
     /**
      * provide the User Repository
      *
-     * @param[api] a instance of the client side of the [Api]
      * @param[ioScheduler] the Rx [Scheduler] on which to make api calls
-     * @param[timeHelper] an instance of [TimeHelper] for cache timing
      * @return A [Repository] for [User]
      */
     @Provides
     @Singleton
     fun providesUserRepository(
-        api: Api, @Named("IOScheduler") ioScheduler: Scheduler,
-        timeHelper: TimeHelper
-    ): Repository<UserRequest, User> {
-        return Repository(
-            ioScheduler,
-            timeHelper,
-            api::getUsers,
-            api::addUser
-        )
-    }
+        userDao: UserDao,
+        @Named("IOScheduler") ioScheduler: Scheduler
+    ) = UserRepository(userDao, ioScheduler)
 
     /**
      * provide the Factory for generating [EventViewModel]
@@ -107,13 +94,13 @@ class AppModule(private val app: Application) {
     @Provides
     @Singleton
     fun providesEventViewModelFactory(
-        eventRepository: Repository<EventRequest, Event>,
+        eventRepository: EventRepository,
         @Named("Main") mainThreadScheduler: Scheduler
     ) : NotedViewModelFactory<EventRequest, Event, EventViewModel> {
         return NotedViewModelFactory(
-            eventRepository,
+            null,
             mainThreadScheduler
-        ) { repository, scheduler -> EventViewModel(repository, scheduler) }
+        ) { _, scheduler -> EventViewModel(eventRepository, scheduler) }
     }
 
     /**
@@ -126,31 +113,32 @@ class AppModule(private val app: Application) {
     @Provides
     @Singleton
     fun providesOccurrenceViewModelFactory(
-        occurrenceRepository: Repository<OccurrenceRequest, Occurrence>,
+        occurrenceRepository: OccurrenceRepository,
+        userRepository: UserRepository,
         @Named("Main") mainThreadScheduler: Scheduler
     ) : NotedViewModelFactory<OccurrenceRequest, Occurrence, OccurrenceViewModel> {
         return NotedViewModelFactory(
-            occurrenceRepository,
+            null,
             mainThreadScheduler
-        ) { repository, scheduler -> OccurrenceViewModel(repository, scheduler) }
+        ) { _, scheduler -> OccurrenceViewModel(occurrenceRepository, userRepository, scheduler) }
     }
 
     /**
      * provide the Factory for generating [UserViewModel]
      *
-     * @param[userRepository] the Occurrence Repository
+     * @param[userRepository] the User Repository
      * @param[mainThreadScheduler] the Main Thread Rx [Scheduler]
      * @return A [NotedViewModelFactory] that can supply [UserViewModel]
      */
     @Provides
     @Singleton
     fun providesUserViewModelFactory(
-        userRepository: Repository<UserRequest, User>,
+        userRepository: UserRepository,
         @Named("Main") mainThreadScheduler: Scheduler
     ) : NotedViewModelFactory<UserRequest, User, UserViewModel> {
         return NotedViewModelFactory(
-            userRepository,
+            null,
             mainThreadScheduler
-        ) { repository, scheduler -> UserViewModel(repository, scheduler) }
+        ) { _, scheduler -> UserViewModel(userRepository, scheduler) }
     }
 }

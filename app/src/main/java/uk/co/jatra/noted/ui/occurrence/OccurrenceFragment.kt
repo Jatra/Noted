@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.occurrence.view.*
 import kotlinx.android.synthetic.main.occurrence_fragment.view.*
 import uk.co.jatra.noted.NotedApplication
 import uk.co.jatra.noted.R
-import uk.co.jatra.noted.network.Occurrence
+import uk.co.jatra.noted.model.Occurrence
 import uk.co.jatra.noted.network.OccurrenceRequest
 import uk.co.jatra.noted.ui.NotedAdapter
 import uk.co.jatra.noted.ui.NotedViewHolder
@@ -69,9 +69,9 @@ class OccurrenceFragment : Fragment() {
 class OccurrenceViewHolder(itemView: View) : NotedViewHolder<Occurrence>(itemView) {
     override fun bind(item: Occurrence) {
         with(itemView) {
-            whoView.text = item.user
+            whoView.text = item.userId
             whenView.text = item.time
-            dataView.text = item.what
+            dataView.text = item.detail
         }
     }
 }

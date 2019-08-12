@@ -12,18 +12,16 @@ import kotlinx.android.synthetic.main.event.view.*
 import kotlinx.android.synthetic.main.event_fragment.view.*
 import uk.co.jatra.noted.NotedApplication
 import uk.co.jatra.noted.R
-import uk.co.jatra.noted.network.Event
-import uk.co.jatra.noted.network.EventRequest
+import uk.co.jatra.noted.model.Event
 import uk.co.jatra.noted.ui.NotedAdapter
 import uk.co.jatra.noted.ui.NotedViewHolder
-import uk.co.jatra.noted.ui.NotedViewModelFactory
 import javax.inject.Inject
 
 class EventFragment : Fragment() {
 
     private lateinit var viewModel: EventViewModel
     @Inject
-    lateinit var viewModelFactory: NotedViewModelFactory<EventRequest, Event, EventViewModel>
+    lateinit var viewModelFactory: EventViewModelFactory
     private val adapter = NotedAdapter(R.layout.event) {
         EventViewHolder(it)
     }
@@ -56,19 +54,19 @@ class EventFragment : Fragment() {
 
     private fun updateView(eventViewState: EventViewState?) {
         eventViewState?.let {
-            adapter.setData(it.events)
+            val oldStyleApiEvents = it.events.map { e -> Event(e.id, e.name, e.description) }
+            adapter.setData(oldStyleApiEvents)
             view?.ptr?.isRefreshing = false
         }
     }
 }
 
-
 class EventViewHolder(itemView: View) : NotedViewHolder<Event>(itemView) {
     override fun bind(item: Event) {
         with(itemView) {
-            idView.text = item.id
-            nameView.text = item.eventName
-            descriptionView.text = item.eventDescription
+            idView.text = item.id.toString()
+            nameView.text = item.name
+            descriptionView.text = item.description
         }
     }
 }
